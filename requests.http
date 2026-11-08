@@ -1,0 +1,43 @@
+### VS Code "REST Client" extension. Run `python manage.py seed_quiz` first.
+@base = http://127.0.0.1:8000/api
+@auth = Basic ZGVtbzpkZW1vMTIzNDU=
+
+### List exams (public)
+GET {{base}}/exams/
+
+### Exam detail
+GET {{base}}/exams/1/
+
+### Create question with nested choices
+POST {{base}}/questions/
+Content-Type: application/json
+Authorization: {{auth}}
+
+{"exam": 1, "text": "Which verb creates a resource?", "points": 2,
+ "choices": [{"text": "POST", "is_correct": true}, {"text": "GET", "is_correct": false},
+             {"text": "HEAD", "is_correct": false}, {"text": "TRACE", "is_correct": false}]}
+
+### Partial update
+PATCH {{base}}/questions/1/
+Content-Type: application/json
+Authorization: {{auth}}
+
+{"points": 5}
+
+### Delete
+DELETE {{base}}/questions/8/
+Authorization: {{auth}}
+
+### Error: required field missing -> 400
+POST {{base}}/exams/
+Content-Type: application/json
+Authorization: {{auth}}
+
+{"description": "no title"}
+
+### Filter and search
+GET {{base}}/questions/?exam=1
+###
+GET {{base}}/questions/?search=django
+###
+GET {{base}}/questions/?page=2
